@@ -1,1 +1,1 @@
-# AlgorithmStudy
+# 정동교 알고리즘 스터디
