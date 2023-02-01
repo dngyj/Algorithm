@@ -1,7 +1,10 @@
 import java.util.Scanner;
 
-public class S1974스도쿠검증 {
+public class Solution {
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
@@ -28,7 +31,7 @@ public class S1974스도쿠검증 {
 				int[] std = new int[9]; // 기준 배열 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 				for (int j = 0; j < 9; j++) {
 
-					std[arr[i][j] - 1] = 1;
+					std[arr[i][j] - 1] ++;
 				}
 				for (int r = 0; r < 9; r++) {
 					if (std[r] == 0) {
@@ -38,11 +41,11 @@ public class S1974스도쿠검증 {
 			}
 
 			// 열 숫자 체크
-			for (int j = 0; j < 9; j++) {
+			for (int i = 0; i < 9; i++) {
 				int[] std = new int[9]; // 기준 배열 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-				for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
 
-					std[arr[j][i] - 1] = 1;
+					std[arr[j][i] - 1]++;
 				}
 				for (int c = 0; c < 9; c++) {
 					if (std[c] == 0) {
@@ -61,10 +64,11 @@ public class S1974스도쿠검증 {
 					int c = j + 3; // 3 6 9
 
 					for (int k = i; k < r; k++) { // 0 1 2/3 4 5/6 7 8
-						for (int m = j; j < c; m++) { // 0 1 2/ 3 4 5/6 7 8
-							std[arr[k][m] - 1] = 1;
+						for (int m = j; m < c; m++) { // 0 1 2/ 3 4 5/6 7 8
+							std[arr[k][m] - 1]++;
 						}
 					}
+
 
 					for (int s = 0; s < 9; s++) {
 						if (std[s] == 0) {
@@ -76,8 +80,8 @@ public class S1974스도쿠검증 {
 
 			}
 
-			System.out.printf("#" + t + " " + result);
-
+			System.out.printf("#" + (t + 1) + " " + result);
+			System.out.println();
 		}
 
 	}
