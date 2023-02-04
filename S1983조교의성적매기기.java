@@ -39,13 +39,13 @@ public class S1983조교의성적매기기 {
 
 
 			int index = 0;
-			index = index / (N / 10);
 
 			for (int m = 0; m < N; m++) {
 				if (score[m] == k_score) {
 					index = m;
 				}
 			}
+			index = index / (N / 10);
 
 			System.out.printf("#%d %s\n", (i + 1), grade[index]);
 
