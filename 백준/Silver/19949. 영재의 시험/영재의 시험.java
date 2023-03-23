@@ -31,12 +31,6 @@ public class Main {
 
 	static void dupliPerm(int cur) {
 		if (cur == 10) {
-			for (int i = 0; i <= 7; i++) {
-				if (output[i] == output[i+1] && output[i+1] == output[i+2]) {
-					return;
-				}
-				
-			}
 			cnt = 0;
 			for (int i = 0; i < 10; i++) {
 				if(output[i] == score[i]) {
@@ -49,6 +43,9 @@ public class Main {
 			return;
 		}
 		for (int i = 1; i <= 5; i++) {
+			if (cur >= 2) {
+				if (output[cur-2] == output[cur-1] && output[cur-1] == i) continue;
+			}
 			output[cur] = i;
 			dupliPerm(cur + 1);
 		}
