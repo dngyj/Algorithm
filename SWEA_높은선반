@@ -1,0 +1,39 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class SWEA_높은선반 {
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		
+		int T = sc.nextInt();
+		
+		for(int tc=1; tc<=T;tc++) {
+		
+		int N = sc.nextInt();
+		int B = sc.nextInt(); // 만들 수 있는 탑 키 이상.
+		int[] height = new int[N];
+		int result = 0;
+		int min = Integer.MAX_VALUE;
+		int[] test = new int[1<<N];
+		
+		
+		for(int i = 0; i<N;i++) {
+			height[i] = sc.nextInt();
+		}
+		
+		for(int i =0;i<(1<<N);i++) {
+			int sum= 0;
+			for(int j=0;j<N;j++) {
+				if((i&(1<<j))>0){
+					sum+=height[j];
+				}
+			}
+			result = sum-B;
+			if(result>=0) min = Math.min(min, result);
+		}
+		System.out.println("#"+tc+" "+min);
+		}
+	}
+}
