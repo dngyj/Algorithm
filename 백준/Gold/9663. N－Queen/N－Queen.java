@@ -1,64 +1,53 @@
-import java.util.*;
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	static BufferedReader br;
 
-	static String endl = "\n";
-	static String blank = " ";
+	static int N, cnt;
+	static int[][] board;
 
-	static int N;
-	static int[] queen;
-	static int cnt;
+	public static void main(String[] args) {
 
-	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-	}
+		Scanner sc = new Scanner(System.in);
 
-	static void pro() throws IOException {
-		int ans = 0;
-		queen = new int[N];
+		N = sc.nextInt();
+		board = new int[N][N];
 		cnt = 0;
-		recur(0);
+
+		function(0);
 		System.out.println(cnt);
+
 	}
 
-	static void recur(int row) {
-		if (row == N) {
+	private static void function(int index) {
+		if (index == N) {
 			cnt++;
-			return;
-		}
-		for (int i = 0; i < N; i++) {
-			if (!isPossible(row, i))
-				continue;
-			queen[row] = i;
-			recur(row + 1);
+		} else {
+			for (int i = 0; i < N; i++) {
+				if (isPossible(index, i)) {
+					board[index][i] = 1;
+					function(index + 1);
+					board[index][i] = 0;
+				}
+			}
 		}
 	}
 
-	static boolean isPossible(int row, int i) {
-		for (int j = 0; j < row; j++) {
-			if (queen[j] == i) return false;
-			if (j - row == queen[j] - i) return false;
-			if (j - row == -(queen[j] - i)) return false;
+	private static boolean isPossible(int r, int c) {
+
+		for (int i = r; i >= 0; i--) {
+			if (board[i][c] == 1)
+				return false;
+		}
+		for (int i = r, j = c; i >= 0 && j >= 0; i--, j--) {
+			if (board[i][j] == 1)
+				return false;
+		}
+		for (int i = r, j = c; i >= 0 && j < N; i--, j++) {
+			if (board[i][j] == 1) {
+				return false;
+			}
 		}
 		return true;
-	}
-
-	static boolean inRange(int r, int c) {
-		return 0 <= r && r < N && 0 <= c && c < N;
-	}
-
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
-	}
-
-	static void stk() throws IOException {
-		st = new StringTokenizer(br.readLine());
 	}
 
 }
