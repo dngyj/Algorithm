@@ -54,18 +54,13 @@ public class Main {
 	            
 	            int nextLen = len+1;
 	            
-	           if(map[idr][idc]==0) {
-	        	   if(!visited[0][idr][idc]&&state==0) {
-	            	queue.add(new int[] {idr, idc, 0,nextLen});
-	            	visited[0][idr][idc] = true;
-	            }else if(state==1&&!visited[1][idr][idc]) {
-	            	queue.add(new int[] {idr, idc, 1,nextLen});
-	            	visited[1][idr][idc] = true;
+	           if(map[idr][idc]==0 && !visited[state][idr][idc]) {
+	            	queue.add(new int[] {idr, idc, state,nextLen});
+	            	visited[state][idr][idc] = true;
 	            }
-	           }
-	           else if(map[idr][idc]==1){
-	        	   if(state == 0) {
-	        		   queue.add(new int[] {idr, idc, 1,nextLen});
+	           else if(map[idr][idc]==1){ // 벽일떄
+	        	   if(state == 0) { // 한번도 뚫은적 없으면
+	        		   queue.add(new int[] {idr, idc, 1,nextLen}); // 뚫고 표시하기
 	        		   visited[1][idr][idc] = true;
 	        	   }
 	           }
