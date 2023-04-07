@@ -1,113 +1,76 @@
-import java.util.*;
-import java.io.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class Main {
 
-
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	static BufferedReader br;
-
-	static String endl = "\n";
-	static String blank = " ";
-
 	static int N, M;
-	static int[][] board;
-	static boolean[][] visited;
-	static boolean[][] wall;
-	static int[] dr = {-1, 0, 1, 0};
-	static int[] dc = {0, 1, 0, -1};
-	static int ans = Integer.MAX_VALUE;
-	static boolean flag = false;
-	
-	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		stk();
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		board = new int[N][M];
-		visited = new boolean[N][M];
-		wall = new boolean[N][M];
-		String str;
-		for (int r = 0; r < N; r++) {
-			str = br.readLine();
-			for (int c = 0; c < M; c++) {
-				board[r][c] = str.charAt(c) - '0';
-			}
-		}
-	}
+	static int[][] map;
+	static boolean[][][] visited;
+	static int[] dr = { -1, 1, 0, 0 };
+	static int[] dc = { 0, 0, -1, 1 };
+	static int idr, idc;
+	static Queue<int[]> queue = new LinkedList<>();
 
-	static void pro() throws IOException {
-		bfs(0, 0);
-		if (flag) {
-			System.out.println(ans);
-		}
-		else System.out.println(-1);
-	}
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+		N = sc.nextInt();
+		M = sc.nextInt();
+
+		map = new int[N][M];
+		visited=new boolean[2][N][M];
 	
-	static void bfs(int r, int c) {
-		Queue<Node> q = new ArrayDeque<Node>();
-		visited[r][c] = true;
-		q.offer(new Node(r, c, 1, false));
-		while (!q.isEmpty()) {
-			Node n = q.poll();
-			if (n.r == N-1 && n.c == M-1) {
-				flag = true;
-				ans = Math.min(ans, n.cnt);
-				return;
+		for (int r = 0; r < N; r++) {
+			String str = sc.next();
+			for (int c = 0; c < M; c++) {
+				map[r][c] = str.charAt(c) - 48;
 			}
-			for (int i = 0; i < 4; i++) {
-				int nr = n.r + dr[i];
-				int nc = n.c + dc[i];
-				int cnt = n.cnt;
-				// bl = 벽을 부순 상태를 나타냄
-				boolean bl = n.bl;
-				// 벽을 부셨으면 벽 만나면 못 가
-				// 벽 안부셨으면 벽 만나면 부수고 가
-				if (bl) {
-					if (!inRange(nr, nc) || wall[nr][nc] || board[nr][nc] == 1) continue;
-					q.offer(new Node(nr, nc, cnt + 1, true));
-					wall[nr][nc] = true;
-				}
-				else { 
-					if (!inRange(nr, nc) || visited[nr][nc]) continue;
-					if (board[nr][nc] == 1) {
-						q.offer(new Node(nr, nc, cnt+1, true));
-						wall[nr][nc] = true;
-					}
-					else {
-						q.offer(new Node(nr, nc, cnt+1, false));
-						visited[nr][nc] = true;
-					}
-				}
-			}
-		}
-	}
-	
-	static boolean inRange(int r, int c) {
-		return 0 <= r && r < N && 0 <= c && c < M;
-	}
-	
-	static class Node {
-		int r, c, cnt;
-		boolean bl;
-		public Node(int r, int c, int cnt, boolean bl) {
-			super();
-			this.r = r;
-			this.c = c;
-			this.cnt = cnt;
-			this.bl = bl;
 		}
 		
-	}
-	
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
+		queue.add(new int[] { 0, 0, 0,1});
+		route();
 	}
 
-	static void stk() throws IOException {
-		st = new StringTokenizer(br.readLine());
+	private static void route() {
+		
+		while (!queue.isEmpty()) {
+			int[] info = queue.poll();
+			int r = info[0];
+			int c = info[1];
+			int state = info[2];
+			int len = info[3];
+			
+			if(r==N-1&&c==M-1) {
+				System.out.println(len);
+				return;
+			}
+			
+			for (int d = 0; d < 4; d++) {
+				int idr = r + dr[d];
+				int idc = c + dc[d];
+				
+	            if (idr<0 || idc<0 || idr>=N || idc>=M) continue;
+	            
+	            int nextLen = len+1;
+	            
+	           if(map[idr][idc]==0) {
+	        	   if(!visited[0][idr][idc]&&state==0) {
+	            	queue.add(new int[] {idr, idc, 0,nextLen});
+	            	visited[0][idr][idc] = true;
+	            }else if(state==1&&!visited[1][idr][idc]) {
+	            	queue.add(new int[] {idr, idc, 1,nextLen});
+	            	visited[1][idr][idc] = true;
+	            }
+	           }
+	           else if(map[idr][idc]==1){
+	        	   if(state == 0) {
+	        		   queue.add(new int[] {idr, idc, 1,nextLen});
+	        		   visited[1][idr][idc] = true;
+	        	   }
+	           }
+			}
+		}
+		System.out.println(-1);
 	}
-
 }
