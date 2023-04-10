@@ -1,38 +1,20 @@
-import java.util.*;
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	static BufferedReader br;
 
-	static String endl = "\n";
-	static String blank = " ";
+	public static void main(String[] args) {
 
-	static int N;
+		Scanner sc = new Scanner(System.in);
 
-	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-	}
+		int N = sc.nextInt();
 
-	static void pro() throws IOException {
-		long[] dp = new long[1001];
+		int[] dp = new int[N + 1];
+		dp[0] = 1; 
 		dp[1] = 1;
-		dp[2] = 2;
-		for (int i = 3; i <= N; i++) {
-			dp[i] = (dp[i - 1] % 10007) + (dp[i - 2] % 10007);
+		for (int i = 2; i <= N; i++) {
+			dp[i] = dp[i-1]+dp[i-2];
+			dp[i] %= 10007;
 		}
-		System.out.println(dp[N] % 10007);
+		System.out.println(dp[N]);
 	}
-
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
-	}
-
-	static void stk() throws IOException {
-		st = new StringTokenizer(br.readLine());
-	}
-
 }
