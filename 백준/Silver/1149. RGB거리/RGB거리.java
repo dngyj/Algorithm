@@ -1,68 +1,37 @@
-import java.util.*;
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	static BufferedReader br;
 
-	static String endl = "\n";
-	static String blank = " ";
+    public static void main(String[] args) {
 
-	static int N;
-	static int[][] home;
-	static int[][] dp;
-	static int ans = Integer.MAX_VALUE;
-	
-	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-		home = new int[N][3];
-		dp = new int[N][3];
-		for (int i = 0; i < N; i++) {
-			stk();
-			for (int j = 0; j < 3; j++) {
-				home[i][j] = Integer.parseInt(st.nextToken());
-				dp[i][j] = -1;
-			}
-		}
-	}
+        Scanner sc = new Scanner(System.in);
 
-	static void pro() throws IOException {
-		dp[0][0] = home[0][0];
-		dp[0][1] = home[0][1];
-		dp[0][2] = home[0][2];
-		int min = Integer.MAX_VALUE;
-		for (int i = 0; i < 3; i++) {
-			recur(1, i);
-			min = Math.min(min, recur (1, i) + home[0][i]);
-		}
-		System.out.println(min);
-	}
-	
-	static int recur(int cur, int prv) {
-		if (cur == N)
-			return 0;
-		
-		if (dp[cur][prv] != -1)
-			return dp[cur][prv];
-		
-		ans = Integer.MAX_VALUE;
-		for (int i = 0; i < 3; i++) {
-			if (i == prv) continue;
-			ans = Math.min(ans, recur (cur + 1, i) + home[cur][i]);
-		}
-		dp[cur][prv] = ans;
-		return ans;
-	}
+        int N = sc.nextInt();
 
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
-	}
+        int[][] dp = new int[N][3];
+        int[][] cost = new int[N][3];
 
-	static void stk() throws IOException {
-		st = new StringTokenizer(br.readLine());
-	}
+        for(int r=0; r<N; r++){
+            for(int c=0; c<3; c++) {
+                cost[r][c] = sc.nextInt();
+            }
+        }
+
+        // N, color
+
+        dp[0][0] = cost[0][0];
+        dp[0][1] = cost[0][1];
+        dp[0][2] = cost[0][2];
+
+        for(int i = 1; i<N;i++){
+            dp[i][0] = Math.min(cost[i][0]+dp[i-1][1],cost[i][0]+dp[i-1][2]);
+            dp[i][1] = Math.min(cost[i][1]+dp[i-1][0],cost[i][1]+dp[i-1][2]);
+            dp[i][2] = Math.min(cost[i][2]+dp[i-1][0],cost[i][2]+dp[i-1][1]);
+        }
+
+        System.out.println(Math.min(Math.min(dp[N-1][0],dp[N-1][1]),dp[N-1][2]));
+
+
+    }
 
 }
