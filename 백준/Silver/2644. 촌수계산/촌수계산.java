@@ -1,54 +1,57 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 public class Main {
-
-    static List<Integer>[] adjList;
-    static boolean[] visited;
-    static int result;
-
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        int N = sc.nextInt();// 전체 사람 수
-        visited = new boolean[N+1];
-        adjList = new ArrayList[N+1];
-
-        for(int i=1; i<N+1;i++){
-            adjList[i] = new ArrayList<>();
-        }
-
-        int targetA = sc.nextInt();
-        int targetB = sc.nextInt();
-
-        int M = sc.nextInt(); // 관계의 개수
-
-        for(int i = 0; i<M;i++){
-            int st = sc.nextInt();
-            int ed = sc.nextInt();
-
-            adjList[st].add(ed);
-            adjList[ed].add(st);
-        }
-        find(targetA, targetB, 0);
-        if(result ==0) System.out.println(-1);
-        else System.out.println(result);
-    }
-
-    private static void find(int st, int ed, int cnt) {
-        if(st==ed){
-            result = cnt;
-            return;
-        }
-
-        visited[st] = true;
-        for(int i=0; i<adjList[st].size();i++){
-            int newSt = adjList[st].get(i);
-            if(!visited[newSt]){
-                find(newSt, ed, cnt+1);
-            }
-        }
-    }
+	// n이 최대 100이며, 모든 노드는 1개의 부모만 가지고 있으므로 인접행렬을 선언할 수 있음
+	static boolean[][] adjArr;
+	static boolean[] visited;
+	static int n,m,ans;
+	static int start,find;
+	public static void main(String[] args) throws Exception{
+		n = read();
+		adjArr = new boolean[n+1][n+1];
+		visited = new boolean[n+1];
+		start = read();
+		find = read();
+		m = read();
+		for(int i = 0 ; i < m; i++) {
+			int v = read();
+			int e = read();
+			adjArr[v][e] = true;
+			adjArr[e][v] = true;
+		}
+		visited[start] = true;
+		dfs(start,0);
+		
+		System.out.print(-1);
+	}
+	
+	static void dfs(int start, int chon) {
+		if(start == find) {
+			System.out.println(chon);
+			System.exit(0);
+		}
+		
+		for(int i=1; i<=n; i++) {
+			if(adjArr[start][i]&&!visited[i]) {
+				visited[i] = true;
+				dfs(i, chon+1);
+			}
+		}
+	}
+	
+	
+	// 비트연산을 이용하여 입력을 빠르게 받는 메서드
+	static int read() throws Exception{
+		int n = 0;
+		boolean isNumber = false;
+		while(true) {
+			int c = System.in.read();
+			if(c<=32) {
+				if(isNumber) return n;
+				else continue;
+			}
+			else {
+				isNumber = true;
+				n = (n<<3) + (n<<1) + (c&15);
+			}
+		}
+	}
 }
