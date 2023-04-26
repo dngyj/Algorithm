@@ -5,7 +5,7 @@ public class Main {
 	static int[][] queries;
 	static boolean[] visited;
 	static int N, nodes;
-
+	static boolean find;
 	public static void main(String[] args) throws Exception{
 		N = read();
 		adjArr = new boolean[N+1][N+1];
@@ -17,26 +17,24 @@ public class Main {
 			if(type==1) {
 				queries[++nodes] = new int[] {read(), read()};
 				for(int j = 1; j < nodes; j++) {
+					int check = 0;
 					if((queries[j][0] > queries[nodes][0]) && (queries[j][0] < queries[nodes][1])) {
 						adjArr[j][nodes] = true;
+						check++;
 					}
 					if((queries[j][1] > queries[nodes][0]) && (queries[j][1] < queries[nodes][1])) {
 						adjArr[j][nodes] = true;
+						check++;
 					}
-					
-					if((queries[nodes][0] > queries[j][0]) && (queries[nodes][0] < queries[j][1])) {
-						adjArr[nodes][j] = true;
-					}
-					if((queries[nodes][1] > queries[j][0]) && (queries[nodes][1] < queries[j][1])) {
-						adjArr[nodes][j] = true;
-					}
+					if(check==1) adjArr[nodes][j] = true;
 				}
 			}else {
 				Arrays.fill(visited, false);
+				find = false;
 				int start = read();
 				visited[start] = true;
-				dfs(start);
-				if(visited[read()]) sb.append(1).append('\n');
+				dfs(start, read());
+				if(find) sb.append(1).append('\n');
 				else sb.append(0).append('\n');
 			}
 		}
@@ -44,19 +42,26 @@ public class Main {
 		System.out.println(sb);
 	}
 	
-	static void dfs(int start) {
+	static void dfs(int start, int end) {
+		if(find) return;
+		
+		if(start == end) {
+			find = true;
+			return;
+		}
+		
 		for(int i=1; i<=nodes; i++) {
 			if(start==i) continue;
 			if(adjArr[start][i]&&!visited[i]) {
 				visited[i] = true;
-				dfs(i);
+				dfs(i, end);
 			}
 		}
 	}
 	
 	
 	// 비트연산을 이용하여 입력을 빠르게 받는 메서드
-	static int read() throws Exception{
+static int read() throws Exception{
 		int n = 0;
 		boolean isNumber = false;
 		boolean isNegative = false;
