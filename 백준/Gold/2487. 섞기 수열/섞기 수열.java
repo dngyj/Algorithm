@@ -1,3 +1,4 @@
+
 public class Main {
 	static int[] arr;
 	static int[] LCM;
@@ -10,11 +11,15 @@ public class Main {
 		}
 		
 		for(int i = 1; i <= N; i++) {
-			LCM[i] = 1+dfs(i, arr[i]);
+			if(LCM[i]==0)
+				LCM[i] = 1+dfs(i, arr[i]);
 		}
 
 		for(int i = 2; i <= N; i++) {
-			LCM[i] = LCM[i] / euclid(LCM[i-1], LCM[i]) * LCM[i-1]; 
+			if(LCM[i]!=1)
+				LCM[i] = LCM[i] / euclid(LCM[i-1], LCM[i]) * LCM[i-1];
+			else
+				LCM[i] = LCM[i-1];
 		}
 		
 		System.out.println(LCM[N]);
@@ -25,6 +30,7 @@ public class Main {
 			return 0;
 		}
 		
+		LCM[now] = 1;
 		return 1+dfs(start, arr[now]);
 	}
 	
