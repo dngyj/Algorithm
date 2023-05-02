@@ -1,4 +1,3 @@
-
 public class Main {
 	static int[] arr;
 	static int[] LCM;
