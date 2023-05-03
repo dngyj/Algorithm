@@ -37,6 +37,7 @@ public class Main {
 		int[][] dist = new int[N][M];
 		Queue<int[]> queue = new LinkedList<>();
 		dist[r][c] = 1;
+		visited[r][c] = true;
 		queue.offer(new int[] {r,c});
 		
 		while(!queue.isEmpty()) {
@@ -46,8 +47,9 @@ public class Main {
 				int R = now[0] + dr[i];
 				int C = now[1] + dc[i];
 				if(!check(R,C))continue;
-				isEdge = false;
 				if(arr[R][C]=='L' && dist[R][C]==0) {
+					isEdge = false;
+					visited[R][C] = true;
 					dist[R][C] = dist[now[0]][now[1]] + 1;
 					max = Math.max(dist[R][C], max);
 					queue.offer(new int[] {R,C});
