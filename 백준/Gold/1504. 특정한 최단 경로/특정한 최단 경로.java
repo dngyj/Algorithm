@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Main {
-	static final int INF = 200000000;
+	static final int INF = Integer.MAX_VALUE;
 	static int N,E, 경유지1, 경유지2, order;
 	static int[][] dist;
 	static int[][] adjArr;
@@ -25,11 +25,27 @@ public class Main {
 		dijkstra(경유지1);
 		dijkstra(경유지2);
 		
-		int min = INF;
-		int a = dist[0][경유지1]+dist[1][경유지2]+dist[2][N];
-		int b = dist[0][경유지2]+dist[1][N]+dist[2][경유지1];
-		min = Math.min(min, Math.min(a, b));
-		System.out.println(min == INF ? -1 : min);
+		boolean aInf = false;
+		boolean bInf = false;
+		int a = 0; int b = 0;
+		if(dist[0][경유지1] != INF) a+= dist[0][경유지1];
+		else aInf = true;
+		if(dist[1][경유지2] != INF) a+= dist[1][경유지2];
+		else aInf = true;
+		if(dist[2][N] != INF) a+= dist[2][N];
+		else aInf = true;
+		
+		if(dist[0][경유지2] != INF) b+= dist[0][경유지2];
+		else bInf = true;
+		if(dist[1][N] != INF) b+= dist[1][N];
+		else bInf = true;
+		if(dist[2][경유지1] != INF) b+= dist[2][경유지1];
+		else bInf = true;
+
+		if(aInf && bInf) System.out.println(-1);
+		else if(aInf) System.out.println(b);
+		else if(bInf) System.out.println(a);
+		else System.out.println(Math.min(a, b));
 
 	}
 	
