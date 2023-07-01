@@ -1,89 +1,70 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class Main {
-	static class Edge implements Comparable<Edge> {
-		int from, to, weight;
-
-		public Edge(int from, int to, int weight) {
-			super();
-			this.from = from;
-			this.to = to;
-			this.weight = weight;
-		}
-
-		@Override
-		public int compareTo(Edge o) {
-			return Integer.compare(this.weight, o.weight);
-		}
-	}
 
 	static int V, E;
-	static Edge[] edgeList;
-	static int[] parents;
+	static int[] p;
+	
+	
+	public static void main(String[] args) {
 
-	static void makeSet() {
-		parents = new int[V + 1];
-		for (int i = 1; i <= V; i++) {
-			parents[i] = i;
+		Scanner sc = new Scanner(System.in);
+		
+		V = sc.nextInt();  // 정점의 개수
+		E = sc.nextInt(); // 간선의 개수
+		
+		int[][] info = new int[E][3]; 
+		
+		for(int i=0; i<E; i++) {
+			info[i][0] = sc.nextInt(); // A번 정점
+			info[i][1] = sc.nextInt(); // B번 정점
+			info[i][2] = sc.nextInt(); // 가중치 간선
 		}
-	}
-
-	static int findSet(int a) {
-		if (a == parents[a])
-			return a;
-		return parents[a] = findSet(parents[a]);
-	}
-
-	static boolean union(int a, int b) {
-		int aRoot = findSet(a);
-		int bRoot = findSet(b);
-
-		if (aRoot == bRoot)
-			return false;
-
-		parents[bRoot] = aRoot;
-		return true;
-
-	}
-
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-
-		st = new StringTokenizer(br.readLine());
-		V = Integer.parseInt(st.nextToken());
-		E = Integer.parseInt(st.nextToken());
-
-		edgeList = new Edge[E];
-
-		for (int i = 0; i < E; i++) {
-			st = new StringTokenizer(br.readLine());
-			int A = Integer.parseInt(st.nextToken());
-			int B = Integer.parseInt(st.nextToken());
-			int W = Integer.parseInt(st.nextToken());
-			edgeList[i] = new Edge(A, B, W);
-		}
-
-		Arrays.sort(edgeList);
-
-		makeSet();
-		int cnt = 0;
-		long ans = 0;
-
-		for (Edge edge : edgeList) {
-			if (union(edge.from, edge.to)) {
-				ans += edge.weight;
-				if (++cnt == V - 1)
-					break;
+		
+		Arrays.sort(info, new Comparator<int[]>() { // 정렬하기 가중치 오름차순으로
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				return o1[2] - o2[2];
 			}
+		});
+		
+		p=new int[V+1]; 
+		
+		for(int i = 1; i<V;i++) { // 값넣기
+			makeset(i);
 		}
-		System.out.println(ans);
+		
+		long result = 0; // 최소 가중치 저장
+		int pick =0; // 간선의 개수
+		
+		for(int i = 0; i<E;i++) {
+			int x = info[i][0];
+			int y = info[i][1];
+			
+			if(findset(x) != findset(y)) {
+				union(x, y);
+				result += info[i][2];
+				pick++;
+			}
+			if(pick==(V-1)) break;
+		}
+		System.out.print(result);
+		}
+	
+	private static void makeset(int i) {
+		p[i] = i;
+	}
+
+	private static void union(int x, int y) {
+		p[findset(y)] = p[findset(x)];
+	}
+
+	private static int findset(int x) {
+		if(x!=p[x])
+			p[x] = findset(p[x]);
+		return p[x];
 	}
 
 }
