@@ -74,14 +74,19 @@ class Solution {
             int dayT = Integer.parseInt(todaySplit[2]);
 
             // System.out.println(yearT+" "+monthT+" "+dayT);
-            if(year<yearT){
+            // if(year<yearT){
+            //     arrList.add(i+1);
+            // }
+            // if(year==yearT&&month<monthT){
+            //     arrList.add(i+1);
+            // }if(year==yearT&&month==monthT&&day<dayT){
+            //     arrList.add(i+1);
+            // }
+            if(year<yearT||year==yearT&&month<monthT
+               ||year==yearT&&month==monthT&&day<dayT)
                 arrList.add(i+1);
-            }
-            if(year==yearT&&month<monthT){
-                arrList.add(i+1);
-            }if(year==yearT&&month==monthT&&day<dayT){
-                arrList.add(i+1);
-            }
+        
+            
         }
         
         return arrList;
