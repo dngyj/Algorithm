@@ -1,46 +1,35 @@
-import java.util.*;
-import java.io.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	static BufferedReader br;
 
-	static String endl = "\n";
-	static String blank = " ";
+    public static void main(String[] args) {
 
-	static int N;
-	static int[] arr;
-	static int[] dp;
+        Scanner sc = new Scanner(System.in);
 
-	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-		arr = new int[N + 1];
-		dp = new int[301];
-		for (int i = 1; i <= N; i++) {
-			arr[i] = Integer.parseInt(br.readLine());
-		}
-	}
+        int N = sc.nextInt();
 
-	static void pro() throws IOException {
-		dp[1] = arr[1];
-		if (N > 1) {
-			dp[2] = dp[1] + arr[2];
-			for (int i = 3; i <= N; i++) {
-				dp[i] = Math.max(dp[i - 2] + arr[i], dp[i - 3] + arr[i - 1] + arr[i]);
-			}
-		}
-		System.out.println(dp[N]);
-	}
+        int[] stair = new int[N+1];
+        int[] dp = new int[N+1];
 
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
-	}
+        for (int i = 1; i <= N; i++) {
+            stair[i] = sc.nextInt();
+        }
 
-	static void stk() throws IOException {
-		st = new StringTokenizer(br.readLine());
-	}
+        dp[1] = stair[1];
+
+        if(N>=2){
+            dp[2] = stair[1]+stair[2];
+        }
+
+
+        for (int i = 3; i <= N; i++) {
+            dp[i] = Math.max(dp[i - 2], stair[i-1] + dp[i - 3]) + stair[i];
+        }
+
+
+        System.out.println(dp[N]);
+
+    }
 
 }
