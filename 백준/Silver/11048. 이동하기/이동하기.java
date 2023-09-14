@@ -1,59 +1,38 @@
-import java.util.*;
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	static BufferedReader br;
 
-	static String endl = "\n";
-	static String blank = " ";
+    public static void main(String[] args) {
 
-	static int N, M;
-	static int[][] arr;
-	static int[][] dp;
-	static int max = Integer.MIN_VALUE;
+        Scanner sc = new Scanner(System.in);
 
-	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		stk();
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		arr = new int[N][M];
-		dp = new int[N][M];
-		for (int i = 0; i < N; i++) {
-			stk();
-			for (int j = 0; j < M; j++) {
-				arr[i][j] = Integer.parseInt(st.nextToken());
-				dp[i][j] = -1;
-			}
-		}
-	}
+        int N = sc.nextInt();
+        int M = sc.nextInt();
 
-	static void pro() throws IOException {
-		dp[0][0] = arr[0][0];
-		for (int i = 1; i < N; i++) {
-			dp[i][0] = dp[i - 1][0] + arr[i][0];
-		}
-		for (int i = 1; i < M; i++) {
-			dp[0][i] = dp[0][i - 1] + arr[0][i];
-		}
-		for (int i = 1; i < N; i++) {
-			for (int j = 1; j < M; j++) {
-				dp[i][j] = Math.max(dp[i][j - 1] + arr[i][j], dp[i - 1][j] + arr[i][j]);
-				dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - 1] + arr[i][j]);
-			}
-		}
-		System.out.println(dp[N - 1][M - 1]);
-	}
+        int[][] miro = new int[N][M];
 
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
-	}
+        for(int i=0;i<N;i++){
+            for(int j=0;j<M;j++){
+                miro[i][j] = sc.nextInt();
+            }
+        }
 
-	static void stk() throws IOException {
-		st = new StringTokenizer(br.readLine());
-	}
+        int[][] dp  = new int[N][M];
 
+        dp[0][0] = miro[0][0];
+
+        for(int k=1;k<N;k++){
+            dp[k][0] += dp[k - 1][0] + miro[k][0];
+        }
+        for(int k=1;k<M;k++) {
+            dp[0][k] += dp[0][k-1] + miro[0][k];
+        }
+
+        for(int r=1;r<N;r++){
+            for(int c=1;c<M;c++) {
+                dp[r][c] = miro[r][c] + Math.max(dp[r-1][c],dp[r][c-1]);
+            }
+        }
+        System.out.println(dp[N-1][M-1]);
+    }
 }
