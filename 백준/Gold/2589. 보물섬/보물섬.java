@@ -1,66 +1,66 @@
-import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class Main {
-	static int N,M,max;
-	static char[][] arr;
-	static boolean[][] visited;
-	static Queue<int[]> queueGlobal = new LinkedList<>();
-	static int[] dr = {-1, 0, 1, 0};
-	static int[] dc = {0, -1, 0, 1};
-	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		arr = new char[N][M];
-		visited = new boolean[N][M];
-		for(int i = 0; i < N; i++) {
-			arr[i] = br.readLine().toCharArray();
-		}
-		
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(!visited[i][j] && arr[i][j]=='L')bfs(i,j,true);
-			}
-		}
-		
-		while(!queueGlobal.isEmpty()) {
-			int[] now = queueGlobal.poll();
-			bfs(now[0],now[1],false);
-		}
-		
-		System.out.println(max-1);
-	}
-	
-	static void bfs(int r, int c, boolean first) {
-		int[][] dist = new int[N][M];
-		Queue<int[]> queue = new LinkedList<>();
-		dist[r][c] = 1;
-		visited[r][c] = true;
-		queue.offer(new int[] {r,c});
-		
-		while(!queue.isEmpty()) {
-			int[] now = queue.poll();
-			boolean isEdge = true;
-			for(int i = 0; i < 4; i++) {
-				int R = now[0] + dr[i];
-				int C = now[1] + dc[i];
-				if(!check(R,C))continue;
-				if(arr[R][C]=='L' && dist[R][C]==0) {
-					isEdge = false;
-					visited[R][C] = true;
-					dist[R][C] = dist[now[0]][now[1]] + 1;
-					max = Math.max(dist[R][C], max);
-					queue.offer(new int[] {R,C});
-				}
-			}
-			if(first && isEdge)queueGlobal.offer(new int[] {now[0],now[1]});
-		}
-	}
-	
-	static boolean check(int r, int c) {
-		if(r<0 || r>=N || c<0 || c>=M) return false;
-		else return true;
-	}
+
+    static int N,M,cnt,max;
+    static char[][] map;
+    static boolean[][] visited;
+
+    static Queue<int[]> queue = new LinkedList<>();
+
+    static int[] dr = {1,-1,0,0};
+    static int[] dc = {0,0,1,-1};
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        N = sc.nextInt();
+        M = sc.nextInt();
+        map = new char[N][M];
+
+        for(int r = 0 ; r< N ; r++){
+            String str = sc.next();
+            for(int c =0; c<M;c++){
+                map[r][c] = str.charAt(c);
+            }
+        }
+
+        max = -1;
+        for(int r = 0 ; r< N ; r++){
+            for(int c =0; c<M;c++){
+                if(map[r][c]=='L'){
+                    visited = new boolean[N][M];
+                    queue.add(new int[]{r,c, 0});
+                    visited[r][c] = true;
+                    bfs();
+                    max = Math.max(max,cnt);
+                }
+            }
+        }
+
+        System.out.println(max);
+    }
+
+    public static void bfs(){
+        while(!queue.isEmpty()){
+           int[] info = queue.poll();
+           int r = info[0];
+           int c = info[1];
+           cnt = info[2];
+
+           for(int i = 0; i<4; i++){
+               int idr = r+dr[i];
+               int idc = c+dc[i];
+
+               if(idr<0||idc<0||idr>=N||idc>=M) continue;
+
+               if(map[idr][idc]=='L'&&!visited[idr][idc]){
+                   visited[idr][idc] = true;
+                   queue.add(new int[]{idr,idc,cnt+1});
+               }
+           }
+        }
+    }
 }
