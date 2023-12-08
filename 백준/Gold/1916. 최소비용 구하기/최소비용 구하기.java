@@ -8,15 +8,15 @@ public class Main {
     static final int INF = Integer.MAX_VALUE;
     static int V, E, start;
     static ArrayList<Node>[] list;
-    static int[] dist;
+    static int[] dp;
 
     public static class Node implements Comparable<Node> {
 
-        int ed;
+        int v;
         int w;
 
-        public Node(int ed, int w) {
-            this.ed = ed;
+        public Node(int v, int w) {
+            this.v = v;
             this.w = w;
         }
 
@@ -39,9 +39,9 @@ public class Main {
             list[i] = new ArrayList<>();
         }
 
-        dist = new int[V + 1]; // key라고 불린 가장 작은 값 저장하는 용도
-        Arrays.fill(dist, INF);
-        dist[start] = 0;
+        dp = new int[V + 1]; // key라고 불린 가장 작은 값 저장하는 용도
+        Arrays.fill(dp, INF);
+        dp[start] = 0;
 
         for (int i = 0; i < E; i++) {
             int st = sc.nextInt();
@@ -54,7 +54,7 @@ public class Main {
         int end = sc.nextInt();
 
         System.out.println(dijkstra(start, end));
-        
+
     }
 
 
@@ -62,26 +62,26 @@ public class Main {
         PriorityQueue<Node> queue = new PriorityQueue<>();
         queue.add(new Node(start, 0));
 
-        dist[start] = 0;
-        queue.add(new Node(start,0));
+        dp[start] = 0;
+//        queue.add(new Node(start, 0));
 
         while (!queue.isEmpty()) {
 
             Node node = queue.poll();
-            int v = node.ed;
-            int weight = node.w;
-            if (dist[v] < weight) { //지금께 더 가중치가 크면 갱신할 필요가 없다.
+            int v = node.v;
+            int w = node.w;
+            if (dp[v] < w) { //지금께 더 가중치가 크면 갱신할 필요가 없다.
                 continue;
             }
             for (int i = 0; i < list[v].size(); i++) {//해당 정점과 연결된 것들 탐색
-                int vertex2 = list[v].get(i).ed;
-                int weight2 = list[v].get(i).w + weight;
-                if (dist[vertex2] > weight2) { //지금것이 더 최단경로라면 갱신해준다.
-                    dist[vertex2] = weight2;
-                    queue.add(new Node(vertex2, weight2));
+                int v2 = list[v].get(i).v;
+                int w2 = list[v].get(i).w + w;
+                if (dp[v2] > w2) { //지금것이 더 최단경로라면 갱신해준다.
+                    dp[v2] = w2;
+                    queue.add(new Node(v2, w2));
                 }
             }
         }
-        return dist[end]; // 해당목적지의 dist값을 출력해준다.
+        return dp[end]; // 해당목적지의 dist값을 출력해준다.
     }
 }
