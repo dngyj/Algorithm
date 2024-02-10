@@ -8,25 +8,17 @@ public class Main {
 
         int N = sc.nextInt();
         int need = sc.nextInt();
-
         int[] trees = new int[N];
 
-        long max = Integer.MIN_VALUE;
-
+        long max = -1;
+        long min = 0;
         for(int i = 0; i<N;i++){
             trees[i] = sc.nextInt();
             max = Math.max(trees[i],max);
         }
 
-        max++;
-
-        long mid = 0;
-        long min = 0;
-
-        while(min<max){
-
-            mid = (max+min)/2;
-
+        while(min<=max){
+            long mid = (max+min)/2;
             long sum =0;
             for(int i=0; i<N;i++) {
                 long temp = 0;
@@ -35,11 +27,11 @@ public class Main {
                 sum += temp;
             }
 
-            if(sum<need) max = mid;
+            if(sum<need) max = mid-1;
             else min = mid+1;
         }
 
-        System.out.println(max-1);
+        System.out.println(max);
     }
 
 }
