@@ -1,52 +1,34 @@
-import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-		long[] arr = new long[N];
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		for(int i=0; i<N; i++) {
-			arr[i] = Long.parseLong(st.nextToken());
-		}
-		
-		Arrays.sort(arr);
-		
-		int s = 0;
-		int e = N-1;
-		long min = 2000000000;
-		long total;
-		long[] duo = {-1,-1};
-		
-		while(s<e) {
-			total = arr[s]+arr[e];
-			if(total==0) {
-				duo[0] = arr[s];
-				duo[1] = arr[e];
-				break;
-			}
-			
-			else if(total>0) {
-				if(total-0<=min) {
-					min = total;
-					duo[0] = arr[s];
-					duo[1] = arr[e];
-				}
-				e--;
-			}
-			
-			else {
-				if(0-total<=min) {
-					min = -total;
-					duo[0] = arr[s];
-					duo[1] = arr[e];
-				}
-				s++;
-			}
-		}
-		
-		System.out.println(duo[0]+" "+duo[1]);
-    }	
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+        int[] waters = new int[N];
+        for(int i =0;i<N;i++){
+            waters[i] = sc.nextInt();
+        }
+        Arrays.sort(waters);
+
+        int left = 0;
+        int right = N-1;
+        int ans1 = 0;
+        int ans2 = 0;
+        int min = Integer.MAX_VALUE;
+        int dist;
+        while(left<right){
+            dist = waters[right]+waters[left];
+            int Dist = Math.abs(dist);
+            if(Dist < min){
+                min = Dist;
+                ans1 = waters[left];
+                ans2 = waters[right];
+            }
+            if(dist>0) right--;
+            else left++;
+        }
+        System.out.println(ans1 +" "+ ans2);
+    }
 }
