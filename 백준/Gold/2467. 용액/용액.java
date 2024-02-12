@@ -1,4 +1,4 @@
-import java.util.Arrays;
+
 import java.util.Scanner;
 
 public class Main {
@@ -10,7 +10,6 @@ public class Main {
         for(int i =0;i<N;i++){
             waters[i] = sc.nextInt();
         }
-        Arrays.sort(waters);
 
         int left = 0;
         int right = N-1;
