@@ -33,12 +33,8 @@ public class Main {
     static void melt(){
         while(true) {
             addIce();
-            for (int r = 0; r < N; r++) {
-                for (int c = 0; c < M; c++) {
-                    if(map[r][c] - decrease[r][c] <0) map[r][c] =0;
-                    else map[r][c] = map[r][c] - decrease[r][c];
-                }
-            }
+            meltIce();
+            
             visited = new boolean[N][M];
             int block = 0;
             isIce = false;
@@ -75,6 +71,14 @@ public class Main {
                 if (map[idr][idc] == 0) decrease[r][c]++;
             }
 
+        }
+    }
+    static void meltIce(){
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < M; c++) {
+                if(map[r][c] - decrease[r][c] <0) map[r][c] =0;
+                else map[r][c] = map[r][c] - decrease[r][c];
+            }
         }
     }
     static void bfs(int row, int col){
