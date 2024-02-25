@@ -31,20 +31,14 @@ public class Main {
         System.out.println(bfs());
     }
     static String bfs(){
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{1,0});
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(1);
         while(!queue.isEmpty()){
-            int[] info = queue.poll();
-            int now = info[0];
-            boolean flag = false;
-            if(gomgom[now]) {
-                flag = true;
-                continue;
-            }
-            if(list[now].isEmpty()&&info[1]==0) return "yes";
+            int now = queue.poll();
+            if(gomgom[now]) continue;
+            if(list[now].isEmpty()) return "yes";
             for(int next : list[now]){
-                if(flag) queue.add(new int[]{next,1});
-                else queue.add(new int[]{next,0});
+                queue.add(next);
             }
         }
         return "Yes";
