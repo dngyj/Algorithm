@@ -1,63 +1,45 @@
-import java.util.*;
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	static BufferedReader br;
+    static int[] ans;
+    static int cnt;
 
-	static String endl = "\n";
-	static String blank = " ";
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ans = new int[10];
+        for(int i = 0; i<10;i++){
+            ans[i] = sc.nextInt();
+        }
+        cnt = 0;
+        backTracking(0,0,new int[10]);
+        System.out.println(cnt);
+    }
+    static void backTracking(int ansCnt, int idx, int[] jjik){
+        if(idx==10){
+            if(ansCnt>=5){
+                cnt++;
+            }
+        }
+        else{
+            int ban = 0;
+            if(idx>=2){
+                if(jjik[idx-1]==jjik[idx-2]){
+                    ban = jjik[idx-1];
+                }
+            }
+            for(int i = 1;i<=5;i++){
+                if(i == ban) continue;
 
-	static int[] score = new int[10];
-	static int[] arr = new int[3];
-	static int[] output = new int[10];
-	static boolean[] visited = new boolean[6];
-	static int cnt = 0;
-	static int ans = 0;
+                jjik[idx] = i;
+                if(ans[idx]==i){
+                    backTracking(ansCnt+1,idx+1,jjik);
+                }
+                else{
+                    backTracking(ansCnt,idx+1,jjik);
+                }
+                jjik[idx] = 0;
 
-	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
-		stk();
-		for (int i = 0; i < 10; i++) {
-			score[i] = Integer.parseInt(st.nextToken());
-		}
-	}
-
-	static void pro() throws IOException {
-		dupliPerm(0);
-		System.out.println(ans);
-	}
-
-	static void dupliPerm(int cur) {
-		if (cur == 10) {
-			cnt = 0;
-			for (int i = 0; i < 10; i++) {
-				if(output[i] == score[i]) {
-					cnt++;
-				}
-			}
-			if (cnt >= 5) {
-				ans++;
-			}
-			return;
-		}
-		for (int i = 1; i <= 5; i++) {
-			if (cur >= 2) {
-				if (output[cur-2] == output[cur-1] && output[cur-1] == i) continue;
-			}
-			output[cur] = i;
-			dupliPerm(cur + 1);
-		}
-	}
-
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
-	}
-
-	static void stk() throws IOException {
-		st = new StringTokenizer(br.readLine());
-	}
-
+            }
+        }
+    }
 }
