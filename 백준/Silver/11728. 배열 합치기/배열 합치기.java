@@ -7,43 +7,18 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int N = sc.nextInt();
         int M = sc.nextInt();
-        int[] A = new int[N];
-        int[] B = new int[M];
+        int[] AB = new int[N+M];
         for(int i = 0;i<N;i++){
-            A[i] = sc.nextInt();
+            AB[i] = sc.nextInt();
         }
-        for(int i = 0;i<M;i++){
-            B[i] = sc.nextInt();
+        for(int i = N;i<N+M;i++){
+            AB[i] = sc.nextInt();
         }
-        Arrays.sort(A);
-        Arrays.sort(B);
-
-        int pointA = 0;
-        int pointB = 0;
-
+        Arrays.sort(AB);
         StringBuilder sb = new StringBuilder();
-
-        while(pointA<N&&pointB<M){
-            if(A[pointA]<=B[pointB]){
-                sb.append(A[pointA]+" ");
-                pointA++;
-            }
-            else if(A[pointA]>B[pointB]){
-                sb.append(B[pointB]+" ");
-                pointB++;
-            }
+        for(int i : AB){
+            sb.append(i+" ");
         }
-        if(pointA==N){
-            while(pointB<M){
-                sb.append(B[pointB++]+" ");
-            }
-        }
-        if(pointB==M){
-            while(pointA<N){
-                sb.append(A[pointA++]+" ");
-            }
-        }
-
         System.out.println(sb);
     }
 }
