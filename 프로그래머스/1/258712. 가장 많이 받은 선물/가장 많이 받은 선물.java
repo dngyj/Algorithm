@@ -1,76 +1,51 @@
-
+import java.util.*;
 
 class Solution {
     
-    static int[][] matrix;
-    static int[] givePresent;
-    static int[] receivePresent;
+    static int[][] record;
+    static int[] presentIndex;
+    static int len;
+    static Map<String, Integer> map = new HashMap<>();
+    static int answer = -1;
     
     public int solution(String[] friends, String[] gifts) {
-        int answer = 0;
-        int len = friends.length;
+        len = friends.length;
+        setValue(friends, gifts);
+        getMaxNextPresent();
+        return answer;
+    }
+
+    
+    static void setValue(String[] friends, String[] gifts){
+        for(int i = 0; i<len;i++){
+            map.put(friends[i], i);
+        }
         
-        matrix = new int[len][len];
-        
-        givePresent = new int[len];
-        receivePresent = new int[len];
-        int[] nextPresent = new int[len];
+        record = new int[len][len];
+        presentIndex = new int[len];
         
         for(int i = 0; i<gifts.length;i++){
             String[] name = gifts[i].split(" ");
             String giver = name[0];
             String receiver = name[1];
-            
-            int gIdx = -1;
-            int rIdx = -1;
-            for(int j = 0; j<len;j++){
-                if(friends[j].equals(giver)){
-                    gIdx = j;
-                    break;   
-                }
-            }
-            for(int j = 0; j<len;j++){
-                if(friends[j].equals(receiver)){
-                    rIdx = j;
-                    break;   
-                }
-            }
-            matrix[gIdx][rIdx]++;
-            givePresent[gIdx]++;
-            receivePresent[rIdx]++;
+            int gIdx = map.get(giver);
+            int rIdx = map.get(receiver);
+            record[gIdx][rIdx]++;
+            presentIndex[gIdx]++;
+            presentIndex[rIdx]--;
         }
-        
-        // for(int r=0;r<len;r++){
-        //     for(int c=0; c<len;c++){
-        //         System.out.print(matrix[r][c]+" ");
-        //     }
-        //     System.out.println();
-        // }
-        
-        for(int i = 0; i<len-1;i++){
-            for(int j = i+1; j<len; j++){
-                if((matrix[i][j]>0||matrix[j][i]>0)&&matrix[i][j]!=matrix[j][i]){
-                    if(matrix[i][j]>matrix[j][i]) nextPresent[i]++;
-                    else nextPresent[j]++;
-                }
-                else if((matrix[i][j]==0&&matrix[j][i]==0)||matrix[i][j]==matrix[j][i]){
-                    if(getPresentScore(i)>getPresentScore(j)) nextPresent[i]++;
-                    else if(getPresentScore(i)<getPresentScore(j)) nextPresent[j]++;
-                }
-            }
-        }
-        for(int i = 0; i<len;i++){
-            answer = Math.max(nextPresent[i],answer);
-        }
-        return answer;
     }
     
-    static int getPresentScore(int idx){
-        return givePresent[idx]-receivePresent[idx];
+    static void getMaxNextPresent(){
+          for(int i = 0; i<len-1;i++){
+            int cnt = 0;
+            for(int j = 0; j<len; j++){
+                if(i==j) continue;
+                if(record[i][j]>record[j][i]) cnt++;
+                else if(record[i][j] == record[j][i]&& presentIndex[i]>presentIndex[j]) cnt++;
+            }
+            answer = Math.max(answer, cnt);
+        }
     }
-    
-    // static boolean isRecord(int i, int j){
-    //     return
-    // }
     
 }
