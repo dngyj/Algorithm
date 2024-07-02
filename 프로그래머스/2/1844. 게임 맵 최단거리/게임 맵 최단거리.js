@@ -12,16 +12,15 @@ function solution(maps) {
     bfs();
     
     function bfs(){
-        let queue = new Queue();
-        queue.add([0,0,1]);
+        let queue = [[0,0,1]]; // queue.add([0,0,1]);
         visited[0][0] = true;
         
-        while(!queue.isEmpty()){
-            const cur = queue.poll();
-            
-            const r = cur[0];
-            const c = cur[1];
-            const cnt = cur[2];
+        while(queue.length){ //!queue.isEmpty();
+            const [r,c,cnt] = queue.shift();
+            // const cur = queue.poll();
+            // const r = cur[0];
+            // const c = cur[1];
+            // const cnt = cur[2];
             
             if(r==N-1&&c==M-1){
                 answer = cnt;
@@ -36,7 +35,7 @@ function solution(maps) {
                 if(maps[idr][idc]===0) continue;
                 if(visited[idr][idc]) continue;
                 visited[idr][idc] = true;
-                queue.add([idr, idc, cnt+1]);
+                queue.push([idr, idc, cnt+1]);
             }
         }
     }
@@ -44,30 +43,3 @@ function solution(maps) {
     return answer;
 }
 
-
-
-class Queue{
-    constructor(){
-        this.storage = {};
-        this.head = 0;
-        this.tail = 0;   
-    }
-    add(item){
-        this.storage[this.tail++] = item;
-    }
-    poll(){
-        let removed = this.storage[this.head];
-        delete this.storage[this.head];
-        this.head++;
-        
-        if(this.head===this.tail){
-            this.head=0;
-            this.tail=0;
-        }
-        return removed;
-    }
-    
-    isEmpty(){
-        return this.tail-this.head===0;
-    }
-}
