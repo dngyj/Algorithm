@@ -1,64 +1,71 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Main {
-    static int N, R1,R2;
-    static ArrayList<Node>[] list;
+    static int n;
+    static List<Node>[] g;
     static class Node{
-        int ed;
-        int w;
-        Node(int ed, int w){
-            this.ed = ed;
-            this.w=w;
+        int x, w, max;
+        public Node(int x, int w) {
+            super();
+            this.x = x;
+            this.w = w;
+        }
+        public Node(int x, int w, int max) {
+            super();
+            this.x = x;
+            this.w = w;
+            this.max = max;
         }
     }
-    static boolean[] visited;
+    
+    public static void main(String[] args) throws NumberFormatException, IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        R1= sc.nextInt();
-        R2 = sc.nextInt();
-        list = new ArrayList[N+1];
-        for(int i=0; i<N+1;i++){
-            list[i]=new ArrayList<>();
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        int a = Integer.parseInt(st.nextToken())-1;
+        int b = Integer.parseInt(st.nextToken())-1;
+        
+        g = new ArrayList[n];
+
+        for (int i=0;i<n;i++) {
+            g[i] = new ArrayList<Node>();
         }
-        for(int i=0;i<N-1;i++){
-            int st = sc.nextInt();
-            int ed = sc.nextInt();
-            int w = sc.nextInt();
-            list[st].add(new Node(ed,w));
-            list[ed].add(new Node(st,w));
+
+        for (int i=0;i<n-1;i++) {
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken())-1;
+            int y = Integer.parseInt(st.nextToken())-1;
+            int w = Integer.parseInt(st.nextToken());
+            g[x].add(new Node(y, w));
+            g[y].add(new Node(x, w));
         }
-        bfs();
+
+        bfs(a, b);
     }
 
-    static void bfs(){
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[]{R1,0,0});
-        visited = new boolean[N+1];
-        visited[R1] = true;
-        int answer = 0;
+    public static void bfs(int a, int b) {
+        Queue<Node> q = new LinkedList<Node>();
+        boolean[] visited = new boolean[n];
+        visited[a] = true;
+        q.add(new Node(a, 0, 0));
 
-        while(!queue.isEmpty()){
-            int[] info = queue.poll();
-            int cur = info[0];
-            int w = info[1];
-            int max = info[2];
-
-            if(cur==R2) answer = w - max;
-
-            for(Node node:list[cur]){
-                int next = node.ed;
-                int w1 = node.w;
-                max = Math.max(w1,max);
-                if(visited[next]) continue;
-                visited[next] = true;
-                queue.add(new int[]{next, w+w1,max});
+        while(!q.isEmpty()) {
+            Node now = q.poll();
+            if(now.x == b) {
+                System.out.println(now.w-now.max);
+                break;
+            }
+            for(Node next : g[now.x]) {
+                if(!visited[next.x]) {
+                    visited[next.x] = true;
+                    q.add(new Node(next.x, now.w+next.w, Math.max(now.max, next.w)));
+                }
             }
         }
-        System.out.println(answer);
     }
 }
