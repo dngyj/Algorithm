@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class Main {
     static int[] loc;
-    static boolean[] visited;
     static int N, M, steps;
     static int center = -1;
 
@@ -17,7 +16,6 @@ public class Main {
 
     static void fillBook(){
         steps = 0;
-        visited = new boolean[N];
         int left = 0;
         int right = N;
 
