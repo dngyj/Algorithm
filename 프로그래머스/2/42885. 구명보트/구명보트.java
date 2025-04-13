@@ -8,26 +8,15 @@ class Solution {
         int N = people.length;
         int left = 0;
         int right = N-1;
-        int count = 0;
-        boolean[] visited = new boolean[N];
-        
+
         while(left<right){
             if(people[left]+people[right]<=limit){
-                visited[left] = true;
-                visited[right] = true;
                 left++;
-                right--;
-                count++;
             }
-            else{
-                right--;
-            }   
+            right--;
         }
         
-        for(boolean v : visited){
-            if(!v) count++;
-        }
-        answer = count;
+        answer = N-left;
         return answer;
     }
 }
